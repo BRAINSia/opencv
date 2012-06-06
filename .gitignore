@@ -1,3 +1,19 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dyld
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Misc ignore files
 *.pyc
 .DS_Store
 refman.rst
@@ -6,3 +22,6 @@ OpenCV4Tegra/
 .sw[a-z]
 .*.swp
 tags
+
+## Files left around after merging
+*.orig
