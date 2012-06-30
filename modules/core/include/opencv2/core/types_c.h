@@ -643,6 +643,7 @@ typedef struct CvMat
 {
     int type;
     int step;
+    // This should not be used for pointer offsets int step; It is columns*size of element, we should just use the correct pointer types
 
     /* for internal use only */
     int* refcount;
@@ -650,7 +651,7 @@ typedef struct CvMat
 
     union
     {
-        uchar* ptr;
+        uchar* ptr; /*ptr need to be of type void * so taht they have proper alignment*/
         short* s;
         int* i;
         float* fl;
@@ -766,11 +767,11 @@ CV_INLINE  double  cvmGet( const CvMat* mat, int row, int col )
             (unsigned)col < (unsigned)mat->cols );
 
     if( type == CV_32FC1 )
-        return ((float*)(mat->data.ptr + (size_t)mat->step*row))[col];
+        return ((float*)(mat->data.fl + (size_t)mat->cols*row))[col];
     else
     {
         assert( type == CV_64FC1 );
-        return ((double*)(mat->data.ptr + (size_t)mat->step*row))[col];
+        return ((double*)(mat->data.db + (size_t)mat->cols*row))[col];
     }
 }
 
@@ -783,11 +784,11 @@ CV_INLINE  void  cvmSet( CvMat* mat, int row, int col, double value )
             (unsigned)col < (unsigned)mat->cols );
 
     if( type == CV_32FC1 )
-        ((float*)(mat->data.ptr + (size_t)mat->step*row))[col] = (float)value;
+        ((float*)(mat->data.fl + (size_t)mat->cols*row))[col] = (float)value;
     else
     {
         assert( type == CV_64FC1 );
-        ((double*)(mat->data.ptr + (size_t)mat->step*row))[col] = (double)value;
+        ((double*)(mat->data.db + (size_t)mat->cols*row))[col] = (double)value;
     }
 }
 
